@@ -24,8 +24,7 @@ import scala.collection.JavaConverters._
   */
 
 trait RootRoutes extends RouteConcatenation with CirceSupportForAkkaHttp with LazyLogging {
-  this: AkkaCoreModule
-  with SparkCoreModule =>
+  this: AkkaCoreModule=>
 
   val exceptionHandler = ExceptionHandler {
     case exception: Exception =>
@@ -45,5 +44,4 @@ trait RootRoutes extends RouteConcatenation with CirceSupportForAkkaHttp with La
       }
     } ~
       new SwaggerDocService().routes
-      //new MetricsService().routes
 }

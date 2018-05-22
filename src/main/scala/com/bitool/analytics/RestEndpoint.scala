@@ -9,7 +9,6 @@ import com.bitool.analytics.sparkcore.SparkCoreModule
   */
 object RestEndpoint extends App
                     with AkkaCoreModule
-                    with SparkCoreModule
-                    with WebServer
                     with RootRoutes
                     with TasksModule
+                    with WebServer
