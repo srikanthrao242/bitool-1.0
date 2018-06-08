@@ -7,7 +7,7 @@
 		revision="0.1-SNAPSHOT"
 		conf="default"
 		confs="default"
-		date="20180523013556"/>
+		date="20180608042459"/>
 	<dependencies>
 		<module organisation="com.github.gseitz" name="sbt-release">
 			<revision name="1.0.0" status="release" pubdate="20150509091459" resolver="sbt-chain" artresolver="sbt-chain" homepage="https://github.com/sbt/sbt-release" extra-scalaVersion="2.10" extra-sbtVersion="0.13" downloaded="false" searched="false" default="false" conf="compile, default(compile)" position="74">

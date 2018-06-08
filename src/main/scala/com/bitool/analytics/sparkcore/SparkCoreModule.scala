@@ -9,10 +9,13 @@ import org.apache.spark.sql.SparkSession
   * Created by srikanth on 5/20/18.
   */
 trait SparkCoreModule {
-  //private val warehouseLocation = "file:${system:user.dir}/spark-warehouse"
-  private val warehouseLocation = new File("spark-warehouse").getAbsolutePath
-  private val hiveMetastore = "file:${system:user.dir}/Hive-Warehouse"
-  implicit lazy val SPARK = SparkSession
+  private val warehouseLocation = "file:${system:user.dir}/spark-warehouse"
+  //private val warehouseLocation = new File("spark-warehouse").getAbsolutePath
+  //private val hiveMetastore = "file:${system:user.dir}/Hive-Warehouse"
+  Logger.getLogger("org").setLevel(Level.OFF)
+  Logger.getLogger("akka").setLevel(Level.OFF)
+
+  final implicit lazy val SPARK = SparkSession
     .builder()
     .master("local[4]")
     .appName("BITOOL")
@@ -26,5 +29,5 @@ trait SparkCoreModule {
     //.config("spark.sql.hive.thriftServer.singleSession",true)
     .enableHiveSupport()
     .getOrCreate()
-  implicit lazy val SPARK_CONTEXT = SPARK.sparkContext
+  final implicit lazy val SPARK_CONTEXT = SPARK.sparkContext
 }

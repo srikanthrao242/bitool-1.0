@@ -4,7 +4,7 @@
 		module="bitool-1-0$sbt_2.10"
 		revision="0.1-SNAPSHOT"
 		status="integration"
-		publication="20180523013556"
+		publication="20180608042458"
 	/>
 	<configurations>
 		<conf name="default" visibility="public"/>

@@ -4,11 +4,11 @@ import akka.actor.ActorSystem
 import akka.http.scaladsl.model.StatusCodes._
 import akka.http.scaladsl.server._
 import com.bitool.analytics.doc.RequestArgs.CREATE_TABLE
-import com.bitool.analytics.doc.services.{DataBase, ScenarioArguments}
+import com.bitool.analytics.doc.services.ScenarioArguments
+import com.bitool.analytics.doc.services.core.DataBase
 import com.bitool.analytics.doc.services.handlers.CreateTable.{CreateTableRequest, TableAccepted}
 import com.bitool.analytics.doc.tasks.{Task, TaskHandlerBase}
-import com.bitool.analytics.util.ErrorResponse
-import com.typesafe.scalalogging.LazyLogging
+import com.bitool.analytics.util.{ErrorResponse, LazyLogging}
 import io.circe.Decoder
 import io.circe.generic.semiauto._
 import io.circe.generic.auto._

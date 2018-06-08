@@ -2,7 +2,8 @@ package com.bitool.analytics
 
 import akka.http.scaladsl.Http
 import com.bitool.analytics.akkacore.AkkaCoreModule
-import com.typesafe.scalalogging.LazyLogging
+import com.bitool.analytics.util.LazyLogging
+import org.apache.log4j.BasicConfigurator
 
 import scala.async.Async.{async, await}
 
@@ -18,6 +19,8 @@ trait WebServer extends LazyLogging {
   private val port = Option(System.getenv("PORT")).map(_.toInt).getOrElse(8080)
 
   private val binding = Http().bindAndHandle(routes, "0.0.0.0", port)
+
+  BasicConfigurator.configure()
 
   async {
     await(binding)

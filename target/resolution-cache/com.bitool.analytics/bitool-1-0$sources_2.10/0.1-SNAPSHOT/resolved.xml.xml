@@ -4,7 +4,7 @@
 		module="bitool-1-0$sources_2.10"
 		revision="0.1-SNAPSHOT"
 		status="integration"
-		publication="20180523013616"
+		publication="20180608042514"
 	/>
 	<configurations>
 		<conf name="default" visibility="public" description=""/>

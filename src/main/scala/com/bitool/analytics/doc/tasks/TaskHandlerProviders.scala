@@ -9,7 +9,8 @@ class TaskHandlerProviders extends TaskHandlerSPI{
   override def getTaskHandlers: Seq[TaskHandler] =
     Seq(
 
-        RestEndpoint.createTable
+        RestEndpoint.createTable,
+        RestEndpoint.getDetails
 
 
     )

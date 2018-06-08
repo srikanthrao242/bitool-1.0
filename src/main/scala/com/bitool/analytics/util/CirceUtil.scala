@@ -12,7 +12,7 @@ import io.circe.{Decoder, Encoder, HCursor}
   */
 object CirceUtil {
 
-  /**
+ /* /**
     * Circe decoder for java.time.Instant from ISO-8601 string representation
     */
   val decodeInstant: Decoder[Instant] = Decoder.decodeString.emap { str =>
@@ -46,6 +46,6 @@ object CirceUtil {
       case "NaN" => Right(Double.NaN)
       case _ => Left("Double")
     }
-  )
+  )*/
 
 }

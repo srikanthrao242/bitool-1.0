@@ -10,8 +10,7 @@ import com.bitool.analytics.akkacore.AkkaCoreModule
 import com.bitool.analytics.doc.tasks.{TaskHandlerProviders, TaskHandlerSPI, TaskService}
 import com.bitool.analytics.sparkcore.SparkCoreModule
 import com.bitool.analytics.swagger.SwaggerDocService
-import com.bitool.analytics.util.{CirceSupportForAkkaHttp, ErrorResponse}
-import com.typesafe.scalalogging.LazyLogging
+import com.bitool.analytics.util.{CirceSupportForAkkaHttp, ErrorResponse, LazyLogging}
 import io.circe.generic.auto._
 
 import scala.collection.JavaConverters._

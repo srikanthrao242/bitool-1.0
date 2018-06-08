@@ -4,8 +4,7 @@ import javax.ws.rs.Path
 
 import akka.http.scaladsl.model.StatusCodes._
 import akka.http.scaladsl.server.{Directives, Route, RouteConcatenation}
-import com.bitool.analytics.util.{CirceSupportForAkkaHttp, ErrorResponse, SuccessResponse}
-import com.typesafe.scalalogging.LazyLogging
+import com.bitool.analytics.util.{CirceSupportForAkkaHttp, ErrorResponse, LazyLogging, SuccessResponse}
 import io.circe.Json
 import io.swagger.annotations._
 import io.circe.generic.auto._
@@ -43,11 +42,11 @@ class TaskService(taskHandlers: Seq[TaskHandler])
   def executeTask: Route =
     post {
       entity(as[Json]) { taskRequest =>
-        val taskTypeOption = taskRequest.hcursor.get[String]("type").toOption
+        val taskTypeOption = taskRequest.hcursor.get[String]("type").right.toOption
         taskTypeOption match {
           case None => complete(BadRequest, ErrorResponse(BadRequest.intValue, "task type undefined"))
           case Some(taskType) =>
-            val taskArgsOption = taskRequest.hcursor.get[Json]("args").toOption
+            val taskArgsOption = taskRequest.hcursor.get[Json]("args").right.toOption
             taskArgsOption match {
               case None => complete(BadRequest, ErrorResponse(BadRequest.intValue, "task args undefined"))
               case Some(taskArgs) => handleTask(taskType, taskArgs)
