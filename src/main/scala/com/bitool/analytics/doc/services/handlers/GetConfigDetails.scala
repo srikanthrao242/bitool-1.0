@@ -2,19 +2,18 @@ package com.bitool.analytics.doc.services.handlers
 
 import akka.actor.ActorSystem
 import akka.http.scaladsl.model.StatusCodes._
-import akka.http.scaladsl.server.Route
+  import akka.http.scaladsl.server.Route
 import com.bitool.analytics.doc.services.ScenarioArguments
 import com.bitool.analytics.doc.services.core.GetData
-import com.bitool.analytics.doc.services.handlers.CreateTable.TableAccepted
 import com.bitool.analytics.doc.services.handlers.GetConfigDetails.{GetConfigReq, RequestAccepted}
 import com.bitool.analytics.doc.tasks.{Task, TaskHandlerBase}
 import com.bitool.analytics.util.LazyLogging
 import io.circe.Decoder
-import io.circe.generic.auto._
 import io.circe.generic.semiauto._
 
 import scala.concurrent.ExecutionContext
 import scala.util.{Failure, Success}
+import io.circe.syntax._
 
 /**
   * Created by srikanth on 6/8/18.
@@ -38,18 +37,24 @@ object GetConfigDetails {
 class GetConfigDetails[A<:ScenarioArguments] (implicit argDecoder: Decoder[A],
                         actorSystem: ActorSystem,
                         ec: ExecutionContext)
-  extends TaskHandlerBase[A]
+  extends TaskHandlerBase[GetConfigReq[A]]
     with LazyLogging {
 
   override def taskType: String = "GET_CONFIG_DETAILS"
 
   override def decoder:  Decoder[GetConfigReq[A]] = deriveDecoder[GetConfigReq[A]]
 
-  override def handleTask(taskRequest: A): Route = {
+  override def handleTask(taskRequest: GetConfigReq[A]): Route = {
     val db = new GetData()
     val response = db.getDataSources
+    import io.circe.generic.auto._
     onComplete(response){
-      case Success(res)=> complete(Accepted,RequestAccepted(isDone = true,res))
+      case Success(res)=> {
+        println("*******************************************************")
+        println(res)
+        println("*******************************************************")
+        complete(OK, s"An error occurred: srikanth it is working")
+      }
       case Failure(ex)    => complete((InternalServerError, s"An error occurred: ${ex.getMessage}"))
     }
   }

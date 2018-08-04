@@ -1,5 +1,7 @@
 package com.bitool.analytics.doc.services.core
 
+import java.io.File
+
 import com.bitool.analytics.doc.RequestArgs.CREATE_TABLE
 import com.bitool.analytics.sparkcore.SparkCoreModule
 import com.typesafe.config.ConfigFactory
@@ -16,14 +18,20 @@ import scala.util._
   */
 class DataBase extends SparkCoreModule{
 
-  val config = ConfigFactory.load("/src/main/resources/SERVER/application.conf")
+  val path = getClass.getResource("/SERVER/application.conf")
+  val configFile = new File(path.getPath)
+  val fileConfig = ConfigFactory.parseFile(configFile)
+  val config = ConfigFactory.load(fileConfig)
+
+
+  //val config = ConfigFactory.load(new File("/src/main/resources/SERVER/application.conf"))
 
   def getDF_Delim(file : String,delimiter : String)(implicit ec: ExecutionContext): Future[DataFrame] =async{
     var dataframe = SPARK.emptyDataFrame
     try{
       dataframe= SPARK.read
           .format("com.databricks.spark.csv")
-          .option("header", "true") // Use first line of all files as header
+          .option("header", "true")
           .option("inferSchema", "true")
           .option("delimiter",delimiter)
           .load(file)
@@ -265,11 +273,14 @@ class DataBase extends SparkCoreModule{
       val dataFrame =  await(this.getDF_Delim(csvFile,delimiter))
       if(DataFrameExtensions.extendedDataFrame(dataFrame).nonEmpty()){
         val map = this.getSchemaMap(dataFrame)
-        if(map("msg").toString.equals("Success")){
-          val hmap = map("hashMap").asInstanceOf[HashMap[String,Any]]
-          if(await(this.insertPredicates(hmap, tableName))){
-            if(await(this.saveDataFrameAsParquet(dataFrame,tableName))){
-              isSaved = true
+        if(map("msg").toString.equals("Success")) {
+          if(await(this.createDatabases))
+          if (await(this.createPredicatesTables)) {
+            val hmap = map("hashMap").asInstanceOf[HashMap[String, Any]]
+            if (await(this.insertPredicates(hmap, tableName))) {
+              if (await(this.saveDataFrameAsParquet(dataFrame, tableName))) {
+                isSaved = true
+              }
             }
           }
         }

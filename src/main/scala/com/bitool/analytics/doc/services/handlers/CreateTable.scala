@@ -8,10 +8,9 @@ import com.bitool.analytics.doc.services.ScenarioArguments
 import com.bitool.analytics.doc.services.core.DataBase
 import com.bitool.analytics.doc.services.handlers.CreateTable.{CreateTableRequest, TableAccepted}
 import com.bitool.analytics.doc.tasks.{Task, TaskHandlerBase}
-import com.bitool.analytics.util.{ErrorResponse, LazyLogging}
+import com.bitool.analytics.util.LazyLogging
 import io.circe.Decoder
 import io.circe.generic.semiauto._
-import io.circe.generic.auto._
 
 import scala.concurrent.ExecutionContext
 import scala.util.{Failure, Success}
@@ -57,6 +56,7 @@ class CreateTableHandler[A <: ScenarioArguments](implicit argDecoder: Decoder[A]
   override def handleTask(task: CreateTableRequest[A]): Route = {
     val db = new DataBase()
     val response = db.createTable(task.args.asInstanceOf[CREATE_TABLE])
+    import io.circe.generic.auto._
     onComplete(response){
       case Success(isCreated)=> complete(Accepted,TableAccepted(true))
       case Failure(ex)    => complete((InternalServerError, s"An error occurred: ${ex.getMessage}"))

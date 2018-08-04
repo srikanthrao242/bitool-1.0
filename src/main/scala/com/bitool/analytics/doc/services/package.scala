@@ -7,4 +7,5 @@ import com.bitool.analytics.doc.services.ScenarioArguments
   */
 package object RequestArgs {
   case class CREATE_TABLE(path : String,tableName:String,delimiter:String) extends ScenarioArguments
+  case class GET_CONFIG(name:String) extends ScenarioArguments
 }

@@ -59,11 +59,10 @@ lazy val commonSettings = Seq(
     "io.circe" %% "circe-literal" % circeVersion, // for string interpolation to JSON model
     "io.circe" %% "circe-parser" % circeVersion, // for parsing VCAP_SERVICES
     "io.circe" %% "circe-optics" % circeVersion, // JSONPath
-    "org.scalafx" %% "scalafx" % "8.0.144-R12",
-    "org.scalafx" %% "scalafxml-core-sfx8" % "0.4",
     "org.apache.spark" %% "spark-core" % sparkVersion,
     "org.apache.spark" %% "spark-sql" % sparkVersion,
     "org.apache.spark" %% "spark-hive" % sparkVersion,
+    "org.apache.spark" %% "spark-catalyst"   % sparkVersion,
     "org.scala-lang" % "scala-xml" % "2.11.0-M4",
     "mysql" % "mysql-connector-java" % "6.0.5"
 

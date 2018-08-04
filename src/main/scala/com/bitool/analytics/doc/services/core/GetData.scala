@@ -1,7 +1,10 @@
 package com.bitool.analytics.doc.services.core
 
+import java.io.File
+
 import com.bitool.analytics.sparkcore.SparkCoreModule
 import com.typesafe.config.ConfigFactory
+
 import scala.collection.mutable.ArrayBuffer
 import scala.concurrent._
 import scala.async.Async.async
@@ -12,7 +15,10 @@ import scala.async.Async.async
 
 class GetData extends SparkCoreModule{
 
-  val config = ConfigFactory.load()
+  val path = getClass.getResource("/SERVER/application.conf")
+  val configFile = new File(path.getPath)
+  val fileConfig = ConfigFactory.parseFile(configFile)
+  val config = ConfigFactory.load(fileConfig)
 
   def getDataSources(implicit ec: ExecutionContext): Future[Map[String,Any]] = async{
     var g_map = Map[String,Any]()
@@ -28,11 +34,14 @@ class GetData extends SparkCoreModule{
           .map(_.getString(0))
           .collect())
     })
+    println("*****************************")
+    println(map)
+    println("*****************************")
     g_map += ("data" -> map)
     g_map += ("msg" -> "Success")
     g_map
   }
-  def getCategories(datasource:String): Future[Map[String,Any]] = async{
+  def getCategories(datasource:String)(implicit ec: ExecutionContext): Future[Map[String,Any]] = async{
     var g_map = Map[String,Any]()
     val metaDB = config.getString("databases.metadb")
     val sqlDFString = SPARK.sql("SELECT category FROM  "

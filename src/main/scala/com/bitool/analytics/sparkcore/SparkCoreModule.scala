@@ -9,25 +9,25 @@ import org.apache.spark.sql.SparkSession
   * Created by srikanth on 5/20/18.
   */
 trait SparkCoreModule {
-  private val warehouseLocation = "file:${system:user.dir}/spark-warehouse"
-  //private val warehouseLocation = new File("spark-warehouse").getAbsolutePath
-  //private val hiveMetastore = "file:${system:user.dir}/Hive-Warehouse"
-  Logger.getLogger("org").setLevel(Level.OFF)
-  Logger.getLogger("akka").setLevel(Level.OFF)
-
+  private val dir = new File("spark-warehouse")
+  private val successful = dir.mkdir()
+  private var warehouseLocation = new File("spark-warehouse").getAbsolutePath
+  if(successful) warehouseLocation = dir.getAbsolutePath
+  //private val warehouseLocation = "file:${system:user.dir}/spark-warehouse"
   final implicit lazy val SPARK = SparkSession
-    .builder()
-    .master("local[4]")
-    .appName("BITOOL")
-    .config("spark.sql.warehouse.dir", warehouseLocation)
-    //.config("javax.jdo.option.ConnectionURL", s"jdbc:derby:;databaseName=$warehouseLocation;create=true")
-    //.config("hive.metastore.warehouse.dir", warehouseLocation)
-    //.config("datanucleus.rdbms.datastoreAdapterClassName", "org.datanucleus.store.rdbms.adapter.DerbyAdapter")
-    //.config(ConfVars.METASTOREURIS.varname, "")
-    //.config("javax.jdo.option.ConnectionDriverName","com.mysql.jdbc.Driver")
-    //.config(confvar.varname, confvar.getDefaultExpr())
-    //.config("spark.sql.hive.thriftServer.singleSession",true)
-    .enableHiveSupport()
-    .getOrCreate()
+                                  .builder()
+                                  .master("local[4]")
+                                  .appName("BITOOL")
+                                  .config("spark.sql.warehouse.dir", warehouseLocation)
+                                  .config("spark.sql.sources.maxConcurrentWrites","1")
+                                  .config("spark.sql.parquet.compression.codec", "snappy")
+                                  .config("hive.exec.dynamic.partition", "true")
+                                  .config("hive.exec.dynamic.partition.mode", "nonstrict")
+                                  .config("parquet.compression", "SNAPPY")
+                                  .config("hive.exec.max.dynamic.partitions", "3000")
+                                  .config("parquet.enable.dictionary", "false")
+                                  .config("hive.support.concurrency", "true")
+                                  .enableHiveSupport()
+                                  .getOrCreate()
   final implicit lazy val SPARK_CONTEXT = SPARK.sparkContext
 }
